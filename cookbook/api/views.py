@@ -3,6 +3,9 @@ from rest_framework import viewsets
 from api import models
 from api import serializers
 
+# example of querying accross relationships
+# this query gives all recipes that have the ingredient milk in them
+# models.Recipe.objects.filter(recipeingredients__ingredient__name='milk')
 
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = models.Department.objects.all()
