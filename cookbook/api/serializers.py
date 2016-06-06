@@ -1,44 +1,40 @@
 from rest_framework import serializers
-from api.models import Department, Ingredient, Unit
-from api.models import Step, Note, Recipe, RecipeIngredient
+from rest_framework_extensions.fields import ResourceUriField
+from api import models
 
 
-class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
+class DepartmentSerializer(serializers.ModelSerializer):
+    self_uri = ResourceUriField(view_name='department-detail', read_only=True)
     class Meta:
-        model = Department
-        fields = ('id', 'name', 'ingredients')
+        model = models.Department
+        fields = ('id', 'name', 'ingredients', 'self_uri')
 
 class IngredientSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Ingredient
+        model = models.Ingredient
         fields = ('id', 'name', 'department')
 
 class UnitSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Unit
+        model = models.Unit
         fields = ('id', 'name', 'name_plural')
         
 class StepSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Step
+        model = models.Step
         fields = ('id', 'order', 'name', 'recipe')
 
 class NoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Note
+        model = models.Note
         fields = ('id', 'name', 'created', 'recipe')  
 
 class RecipeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Recipe
+        model = models.Recipe
         fields = ('id', 'name', 'created', 'steps', 'notes', 'recipeingredients', 'url')
         
-class RecipeDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'created', 'steps', 'notes', 'recipeingredients', 'url')
-
 class RecipeIngredientSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = RecipeIngredient
+        model = models.RecipeIngredient
         fields = ('id', 'qty', 'unit', 'ingredient', 'preparation', 'recipe')

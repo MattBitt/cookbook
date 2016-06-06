@@ -11,7 +11,7 @@ router.register(r'notes', views.NoteViewSet)
 router.register(r'steps', views.StepViewSet)
 router.register(r'recipes', views.RecipeViewSet)
 router.register(r'recipeingredients', views.RecipeIngredientViewSet)
-router.register(r'recipedatas', views.RecipeDataViewSet)
+
 
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.

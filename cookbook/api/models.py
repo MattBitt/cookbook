@@ -58,7 +58,8 @@ class Recipe(models.Model):
     name = models.CharField(max_length=25, blank=False)
     image_path = models.CharField(max_length=150, blank=True)
     url = models.CharField(max_length=200, blank=True)
-    
+    #reset this value each time the recipe is printed?
+    #last_cooked = models.DateField(blank=True)
     
     class Meta:
         ordering = ('name',)

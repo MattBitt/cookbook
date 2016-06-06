@@ -1,38 +1,33 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from api.models import Department, Ingredient, Unit, Step, Note, Recipe, RecipeIngredient
-from api.serializers import DepartmentSerializer, IngredientSerializer, UnitSerializer
-from api.serializers import NoteSerializer, StepSerializer, RecipeSerializer
-from api.serializers import RecipeIngredientSerializer, RecipeDataSerializer
+from api import models
+from api import serializers
+
 
 class DepartmentViewSet(viewsets.ModelViewSet):
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
+    queryset = models.Department.objects.all()
+    serializer_class = serializers.DepartmentSerializer
     
 class IngredientViewSet(viewsets.ModelViewSet):
-    queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
+    queryset = models.Ingredient.objects.all()
+    serializer_class = serializers.IngredientSerializer
 
 class UnitViewSet(viewsets.ModelViewSet):
-    queryset = Unit.objects.all()
-    serializer_class = UnitSerializer
+    queryset = models.Unit.objects.all()
+    serializer_class = serializers.UnitSerializer
     
 class NoteViewSet(viewsets.ModelViewSet):
-    queryset = Note.objects.all()
-    serializer_class = NoteSerializer
+    queryset = models.Note.objects.all()
+    serializer_class = serializers.NoteSerializer
     
 class StepViewSet(viewsets.ModelViewSet):
-    queryset = Step.objects.all()
-    serializer_class = StepSerializer
+    queryset = models.Step.objects.all()
+    serializer_class = serializers.StepSerializer
     
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
+    queryset = models.Recipe.objects.all()
+    serializer_class = serializers.RecipeSerializer
     
 class RecipeIngredientViewSet(viewsets.ModelViewSet):
-    queryset = RecipeIngredient.objects.all()
-    serializer_class = RecipeIngredientSerializer
-    
-class RecipeDataViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
-    serializer_class = RecipeDataSerializer
+    queryset = models.RecipeIngredient.objects.all()
+    serializer_class = serializers.RecipeIngredientSerializer
