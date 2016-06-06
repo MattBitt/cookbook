@@ -1,0 +1,161 @@
+[
+{
+    "model": "api.department",
+    "pk": 2,
+    "fields": {
+        "name": "produce"
+    }
+},
+{
+    "model": "api.department",
+    "pk": 3,
+    "fields": {
+        "name": "dairy"
+    }
+},
+{
+    "model": "api.department",
+    "pk": 4,
+    "fields": {
+        "name": "grocery"
+    }
+},
+{
+    "model": "api.ingredient",
+    "pk": 2,
+    "fields": {
+        "name": "cauliflower",
+        "department": 2
+    }
+},
+{
+    "model": "api.ingredient",
+    "pk": 3,
+    "fields": {
+        "name": "broccoli",
+        "department": 2
+    }
+},
+{
+    "model": "api.ingredient",
+    "pk": 4,
+    "fields": {
+        "name": "milk",
+        "department": 3
+    }
+},
+{
+    "model": "api.unit",
+    "pk": 1,
+    "fields": {
+        "name": "tsp",
+        "name_plural": "tsps"
+    }
+},
+{
+    "model": "api.unit",
+    "pk": 2,
+    "fields": {
+        "name": "tbsp",
+        "name_plural": "tbsps"
+    }
+},
+{
+    "model": "api.recipe",
+    "pk": 1,
+    "fields": {
+        "created": "2016-06-06T14:56:54.481Z",
+        "name": "my first recipe",
+        "image_path": "",
+        "url": ""
+    }
+},
+{
+    "model": "api.recipe",
+    "pk": 2,
+    "fields": {
+        "created": "2016-06-06T15:29:40.831Z",
+        "name": "new recipe",
+        "image_path": "",
+        "url": ""
+    }
+},
+{
+    "model": "api.recipe",
+    "pk": 3,
+    "fields": {
+        "created": "2016-06-06T15:29:58.727Z",
+        "name": "new recipe number 2",
+        "image_path": "",
+        "url": ""
+    }
+},
+{
+    "model": "api.recipe",
+    "pk": 4,
+    "fields": {
+        "created": "2016-06-06T15:31:02.889Z",
+        "name": "new recipe number 3",
+        "image_path": "",
+        "url": ""
+    }
+},
+{
+    "model": "api.note",
+    "pk": 1,
+    "fields": {
+        "created": "2016-06-06T14:57:30.544Z",
+        "name": "serve with asparagus",
+        "recipe": 4
+    }
+},
+{
+    "model": "api.step",
+    "pk": 1,
+    "fields": {
+        "name": "bring water to a boil",
+        "order": 1,
+        "recipe": 4
+    }
+},
+{
+    "model": "api.step",
+    "pk": 2,
+    "fields": {
+        "name": "simmer for 1 hour",
+        "order": 2,
+        "recipe": 1
+    }
+},
+{
+    "model": "api.step",
+    "pk": 3,
+    "fields": {
+        "name": "remove from heat",
+        "order": 3,
+        "recipe": 1
+    }
+},
+{
+    "model": "api.recipeingredient",
+    "pk": 1,
+    "fields": {
+        "qty": 4,
+        "preparation": "chopped",
+        "ingredient": 3,
+        "unit": 2,
+        "recipe": 4
+    }
+},
+{
+    "model": "api.recipeingredient",
+    "pk": 3,
+    "fields": {
+        "qty": 12,
+        "preparation": "shredded",
+        "ingredient": 2,
+        "unit": 2,
+        "recipe": 4
+    }
+}
+]

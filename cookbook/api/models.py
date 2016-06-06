@@ -61,6 +61,9 @@ class Recipe(models.Model):
     #reset this value each time the recipe is printed?
     #last_cooked = models.DateField(blank=True)
     
+    #tag = many to many
+    #low and slow, breakfast, quick and easy, outside ...
+    
     class Meta:
         ordering = ('name',)
         
@@ -105,7 +108,7 @@ class Step(models.Model):
     )
     
     class Meta:
-        ordering = ('name',)
+        ordering = ('order',)
         
     def __str__(self):
         return self.name
@@ -136,10 +139,20 @@ class RecipeIngredient(models.Model):
     )
         
     def __str__(self):
-        return '{} {} {}, {}'.format(self.qty, self.unit, self.ingredient, self.preparation)
+        return '{} {} {}, {}'.format(
+            self.qty, 
+            self.unit, 
+            self.ingredient, 
+            self.preparation
+        )
     
     def __unicode__(self):
-        return '{} {} {}, {}'.format(self.qty, self.unit, self.ingredient, self.preparation)
+        return '{} {} {}, {}'.format(
+            self.qty, 
+            self.unit, 
+            self.ingredient, 
+            self.preparation
+        )
     
     def __repr__(self):
         return '<RecipeIngredient {}>'.format(self.id) 
