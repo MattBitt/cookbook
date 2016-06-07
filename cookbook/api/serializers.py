@@ -57,8 +57,12 @@ class StepSerializer(ExpanderSerializerMixin,serializers.HyperlinkedModelSeriali
         read_only=True
     )
     recipe = serializers.StringRelatedField(
-        many=False,
-        read_only=False,
+        read_only=True
+    )
+    recipe_id = serializers.PrimaryKeyRelatedField(
+        queryset = models.Recipe.objects.all(),
+        source='recipe',
+        write_only=True,
         required=False
     )
 
@@ -69,6 +73,7 @@ class StepSerializer(ExpanderSerializerMixin,serializers.HyperlinkedModelSeriali
             'order', 
             'name',
             'recipe',
+            'recipe_id',
             'self_uri'
         )            
 
@@ -77,10 +82,15 @@ class NoteSerializer(ExpanderSerializerMixin,serializers.HyperlinkedModelSeriali
         view_name='note-detail', 
         read_only=True
     )
-    recipe = serializers.StringRelatedField(
-        many=False,
-        read_only=False,
+    recipe_id = serializers.PrimaryKeyRelatedField(
+        queryset = models.Recipe.objects.all(),
+        source='recipe',
+        write_only=True,
         required=False
+    )
+        
+    recipe = serializers.StringRelatedField(
+        read_only=True
     )
     
     def get_validation_exclusions(self):
@@ -94,24 +104,29 @@ class NoteSerializer(ExpanderSerializerMixin,serializers.HyperlinkedModelSeriali
             'name', 
             'created',
             'recipe',
+            'recipe_id',
             'self_uri'
         )
 
         
 class RecipeIngredientSerializer(ExpanderSerializerMixin,serializers.HyperlinkedModelSerializer):
-    ingredient = serializers.StringRelatedField(
-        many=False,
-        read_only=False,
-        required=False
-    )    
-    unit = serializers.StringRelatedField(
-        many=False,
-        read_only=False,
-        required=False
+    ingredient = IngredientSerializer(read_only=True)
+    ingredient_id = serializers.PrimaryKeyRelatedField(
+        queryset = models.Ingredient.objects.all(),
+        source='ingredient',
+        write_only=True,
     )
-    recipe = serializers.StringRelatedField(
-        many=False,
-        read_only=False,
+    unit_id = serializers.PrimaryKeyRelatedField(
+        queryset = models.Unit.objects.all(),
+        source='unit',
+        write_only=True,
+    )
+    unit = UnitSerializer(read_only=True)
+    recipe = serializers.StringRelatedField(read_only=True)
+    recipe_id = serializers.PrimaryKeyRelatedField(
+        queryset = models.Recipe.objects.all(),
+        source='recipe',
+        write_only=True,
         required=False
     )
     
@@ -130,6 +145,9 @@ class RecipeIngredientSerializer(ExpanderSerializerMixin,serializers.Hyperlinked
             'preparation', 
             'ingredient',
             'recipe',
+            'recipe_id',
+            'ingredient_id',
+            'unit_id',
             'self_uri'
         )
         
@@ -161,36 +179,55 @@ class RecipeSerializer(ExpanderSerializerMixin,serializers.HyperlinkedModelSeria
     )
     
     def create(self, validated_data):
-        #import pdb; pdb.set_trace()
-        if 'steps' in validated_data.keys():
-            steps_data = validated_data.pop('steps')
-        if 'notes' in validated_data.keys():
-            notes_data = validated_data.pop('notes')
-        if 'recipeingredients' in validated_data.keys():
-            recipeingredients_data = validated_data.pop('recipeingredients')
+        # This function allows steps, notes, and recipeingredients
+        # to be created at the same time as the recipe.  They should
+        # never be created without a recipe.
+        # 
+        # example input
+        # {
+        # "name":"boudin",
+        # "steps":
+            # [{"order":1,"name":"boil meat"}],
+        # "notes":
+            # [{"name":"not as good as champagnes"}],
+        # "recipeingredients":
+        # [{"qty":1,"preparation":"chopped","unit_id":1,"ingredient_id":1},
+        # {"qty":4,"preparation":"sliced","unit_id":1,"ingredient_id":2}],
+        # "url":""}
+        item_types = ['steps', 'notes', 'recipeingredients']
+        item_models = {
+            'steps' : models.Step,
+            'notes' : models.Note,
+            'recipeingredients' : models.RecipeIngredient
+        }
+        import pdb; pdb.set_trace()
+        item_data = {}
+        for item_type in item_types:
+            if item_type in validated_data.keys():
+                item_data[item_type] = validated_data.pop(item_type)
+        # if 'steps' in validated_data.keys():
+            # steps_data = validated_data.pop('steps')
+        # if 'notes' in validated_data.keys():
+            # notes_data = validated_data.pop('notes')
+        # if 'recipeingredients' in validated_data.keys():
+            # recipeingredients_data = validated_data.pop('recipeingredients')
         new_recipe = models.Recipe.objects.create(**validated_data)
-        for step in steps_data:
-            new_step = models.Step.objects.create(recipe=new_recipe, **step)
-        for note in notes_data:
-            new_note = models.Note.objects.create(recipe=new_recipe, **note)
-        for recipeingredient in self.context['request'].data['recipeingredients']:
-            #import pdb; pdb.set_trace()
-            ingredient_name = recipeingredient.pop('ingredient')
-            ing, created = models.Ingredient.objects.get_or_create(
-                name=ingredient_name)
-            #existing_ing = models.Ingredient.objects.filter(name=ingredient_name).first()
-            #if existing_ing is None:
-            #    ing = models.Ingredient.objects.create(**recipeingredient['ingredient'])
-            #else:
-            #    ing = existing_ing
-            unit_name = recipeingredient.pop('unit')
-            unit, created = models.Unit.objects.get_or_create(
-                name=unit_name)
-            rec_ing = models.RecipeIngredient.objects.create(
-                ingredient=ing, 
-                recipe=new_recipe, 
-                unit=unit,
-                **recipeingredient)
+        # loop through steps, notes, and recipeingredients
+        for item_type in item_types:
+            # loop through each individual item in each type
+            for item in item_data[item_type]:
+                new_item = item_models[item_type].objects.create(
+                    recipe=new_recipe,
+                    **item
+                )
+        # for step in steps_data:
+            # new_step = models.Step.objects.create(recipe=new_recipe, **step)
+        # for note in notes_data:
+            # new_note = models.Note.objects.create(recipe=new_recipe, **note)
+        
+        # for recipeingredient in recipeingredients_data:
+            #import pdb; pdb.set_trace()        
+            #new_rec_ing = models.RecipeIngredient.objects.create(recipe=new_recipe, **recipeingredient)
         return new_recipe
             
             
