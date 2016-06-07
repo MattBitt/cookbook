@@ -55,11 +55,12 @@ class Unit(models.Model):
 
 class Recipe(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=25, blank=False)
+    name = models.CharField(max_length=25, blank=False, unique=True)
     image_path = models.CharField(max_length=150, blank=True)
     url = models.CharField(max_length=200, blank=True)
+    rating = models.IntegerField(default=0, null=True, blank=True)
     #reset this value each time the recipe is printed?
-    #last_cooked = models.DateField(blank=True)
+    #last_cooked = models.DateField(default='')
     
     #tag = many to many
     #low and slow, breakfast, quick and easy, outside ...
