@@ -61,5 +61,8 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
-Virtual Enviornment
+#Virtual Enviornment
 venv/*
+
+#My Logs
+logfile.t*

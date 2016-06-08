@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from api import models
+from django.core.urlresolvers import reverse
 import json
 
 class DepartmentTestCase(TestCase):
@@ -9,12 +10,12 @@ class DepartmentTestCase(TestCase):
         self.client = Client()
 
     def testGetAllDepartments(self):
-        response = self.client.get('/api/departments/')
+        response = self.client.get(reverse('department-list'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 3)
 
     def testGetOneDepartments(self):
-        response = self.client.get('/api/departments/2/')
+        response = self.client.get(reverse('department-detail', args=[2]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['name'], 'produce')
         
@@ -22,7 +23,7 @@ class DepartmentTestCase(TestCase):
         data = {'name' : 'hba'}
         data_string = json.dumps(data)
         response = self.client.post(
-            '/api/departments/', 
+            reverse('department-list'), 
             content_type='application/json',
             data=data_string
         )
@@ -30,9 +31,9 @@ class DepartmentTestCase(TestCase):
         self.assertEqual(response.data['id'], 5)
 
     def testDeleteDepartment(self):
-        response = self.client.delete('/api/departments/2/')
+        response = self.client.delete(reverse('department-detail', args=[2]))
         self.assertEqual(response.status_code, 204)
-        response = self.client.get('/api/departments/2/')
+        response = self.client.get(reverse('department-detail', args=[2]))
         self.assertEqual(response.status_code, 404)
 
         
