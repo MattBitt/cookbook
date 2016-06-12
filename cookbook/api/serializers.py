@@ -27,10 +27,10 @@ class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
         view_name='department-detail', 
         read_only=True
     )
-    ingredients = IngredientSerializer(
-        many=True,
-        read_only=True
-    )
+    #ingredients = IngredientSerializer(
+    #    many=True,
+    #    read_only=True
+    #)
 
     class Meta:
         model = models.Department

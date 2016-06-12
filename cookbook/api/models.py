@@ -18,7 +18,7 @@ class Department(models.Model):
         return '<Department {} {}>'.format(self.id, self.name)
         
 class Ingredient(models.Model):
-    name = models.CharField(max_length=50, blank=False)
+    name = models.CharField(max_length=100, blank=False)
     department = models.ForeignKey(
         Department, 
         related_name='ingredients', 
@@ -38,8 +38,8 @@ class Ingredient(models.Model):
         return '<Ingredient {} {}>'.format(self.id, self.name)
         
 class Unit(models.Model):
-    name = models.CharField(max_length=25, blank=False)
-    name_plural = models.CharField(max_length=25, blank=True)
+    name = models.CharField(max_length=50, blank=False)
+    name_plural = models.CharField(max_length=50, blank=True)
     
     class Meta:
         ordering = ('name',)
@@ -55,8 +55,8 @@ class Unit(models.Model):
 
 class Recipe(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=25, blank=False, unique=True)
-    image_path = models.CharField(max_length=150, blank=True)
+    name = models.CharField(max_length=100, blank=False, unique=True)
+    image_path = models.CharField(max_length=500, blank=True)
     url = models.CharField(max_length=200, blank=True)
     rating = models.IntegerField(default=0, null=True, blank=True)
     #reset this value each time the recipe is printed?
@@ -80,7 +80,7 @@ class Recipe(models.Model):
         
 class Note(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=1000, blank=False)
     recipe = models.ForeignKey(
         Recipe, 
         related_name='notes',
@@ -100,7 +100,7 @@ class Note(models.Model):
         return '<Note {} {}>'.format(self.id, self.name) 
 
 class Step(models.Model):
-    name = models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=1000, blank=False)
     order = models.IntegerField(blank=False)
     recipe = models.ForeignKey(
         Recipe, 
@@ -122,7 +122,7 @@ class Step(models.Model):
 
 class RecipeIngredient(models.Model):
     qty = models.IntegerField()
-    preparation = models.CharField(max_length=100)
+    preparation = models.CharField(max_length=500)
     ingredient = models.ForeignKey(
         Ingredient,
         related_name='recipeingredients',
