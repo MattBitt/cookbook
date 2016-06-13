@@ -15,9 +15,9 @@ class RequestLogMiddleware(object):
             'request_path': request.get_full_path(),
             #'request_body': request.body,
 
-            'response_status': response.status_code,
+            'response_status': response.status_code
 
-            'run_time': time.time() - request.start_time,
+            #'run_time': time.time() - request.start_time,
         }
         # how to get response content without capturing HTML??
         
